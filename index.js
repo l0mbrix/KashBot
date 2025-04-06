@@ -11,10 +11,10 @@ let contributions = {}; // Contributions par utilisateur
 const motsCibles = ['désolé', 'désolée', 'déso', 'dsl', 'sorry', 'sry', 'mea culpa', 'mea maxima culpa', 'm\'excuse', 'm\'excuser', 'excuse', 'pardon', 'pardonnez']; // Liste des mots cibles
 
 const reponses = [
-  '💸 Et hop ! 1€ de plus dans la cagnotte', 
-  '😏 Ben alors **${message.author.username}**, on s\'excuse encore ?',
-  '💰 Dis-donc ! On n\'avait pas dit qu\'on ne s\'excusait plus ici ?',
-  '🪙 ALERTE CONTRIBUTION ! **${message.author.username}** vient d\'ajouter 1 nouvel € dans la boite !' 
+  `💸 Et hop ! 1€ de plus dans la cagnotte`, 
+  `😏 Ben alors **${message.author.username}**, on s\'excuse encore ?`,
+  `💰 Dis-donc ! On n\'avait pas dit qu\'on ne s\'excusait plus ici ?`,
+  `🪙 ALERTE CONTRIBUTION ! **${message.author.username}** vient d\'ajouter 1 nouvel € dans la boite !` 
 ]
 
 function normalizeText(text) { // Fonction pour normaliser un texte (insensible à la casse et aux accents)
