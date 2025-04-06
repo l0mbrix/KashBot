@@ -43,6 +43,11 @@ client.on('messageCreate', (message) => {
 
       console.log(`ALERTE ! Le mot "${mot}" a été employé !`);
       message.channel.send(`ALERTE ! Le mot "${mot}" a été employé ! La cagnotte est maintenant de ${cagnotte}€.`);
+
+      const emoji = message.guild.emojis.cache.get('1260632973796053065'); // Réaction par un emoji au "mot interdit"
+      if (emoji) {
+        message.react(emoji).catch(console.error);
+      }
     }
   });
 
