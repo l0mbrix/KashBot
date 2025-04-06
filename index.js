@@ -5,6 +5,9 @@ const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
 });
 
+// test d'importation
+import { sorryWordsList } from "enum/matchWordsLists.js"
+
 // Stockage des contributions
 let cagnotte = 0; // Cagnotte globale
 let contributions = {}; // Contributions par utilisateur

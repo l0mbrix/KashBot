@@ -1,2 +1,5 @@
 # Ignore the .env file that contains sensitive information
 .env
+
+# Ignore the config.json
+config.json
