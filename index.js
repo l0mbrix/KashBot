@@ -26,9 +26,9 @@ client.on('messageCreate', (message) => {
 
   const reponses = [ // ATTENTION : l'appel de "message" ne peut se faire qu'à partir d'ici !!!!!
     `💸 Et hop ! 1€ de plus dans la cagnotte`, 
-    `😏 Ben alors ${message.author.username}, on s\'excuse encore ?`,
+    `😏 Ben alors **${message.author.username}**, on s\'excuse encore ?`,
     `💰 Dis-donc ! On n\'avait pas dit qu\'on ne s\'excusait plus ici ?`,
-    `🪙 ALERTE CONTRIBUTION ! ${message.author.username} vient d\'ajouter 1 nouvel € dans la boite !`
+    `🪙 ALERTE CONTRIBUTION ! **${message.author.username}** vient d\'ajouter 1 nouvel € dans la boite !`
   ]
 
   if (message.author.bot) return; // Ne pas répondre aux messages du bot lui-même
