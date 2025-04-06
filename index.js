@@ -10,6 +10,8 @@ let cagnotte = 0; // Cagnotte globale
 let contributions = {}; // Contributions par utilisateur
 const motsCibles = ['désolé', 'désolée', 'déso', 'dsl', 'sorry', 'sry', 'mea culpa', 'mea maxima culpa', 'm\'excuse', 'm\'excuser', 'excuse', 'pardon', 'pardonnez']; // Liste des mots cibles
 
+const test = `😏 Ben alors ${message.author.username}, on s\'excuse encore ?`,
+
 const reponses = [
   `💸 Et hop ! 1€ de plus dans la cagnotte`, 
   `😏 Ben alors ${message.author.username}, on s\'excuse encore ?`,
