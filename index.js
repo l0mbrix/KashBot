@@ -46,7 +46,9 @@ client.on('messageCreate', (message) => {
 
       console.log(`🪙 ALERTE ! Le mot "${mot}" a été employé !`);
       const reponseAleatoire = reponses[Math.floor(Math.random() * reponses.length)]; // Choix d'une réponse aléatoire dans le tableau
-      message.channel.send(`${reponseAleatoire} La cagnotte est maintenant de ${cagnotte}€.`);
+      const reponseAvecNom = reponseAleatoire.replace('${message.author.username}', message.author.username); // Remplacer le placeholder ${message.author.username} par le vrai nom de l'utilisateur
+      
+      message.channel.send(`${reponseAleatoire} La cagnotte est maintenant de ${cagnotte}€. 💼`);
       const emoji = message.guild.emojis.cache.get('1260632973796053065'); // Réaction par un emoji au "mot interdit"
       if (emoji) {
         message.react(emoji).catch(console.error);
@@ -56,7 +58,7 @@ client.on('messageCreate', (message) => {
 
   // Commande de consultation de la cagnotte générale
   if (message.content.toLowerCase() === '!cagnotte') {
-    message.channel.send(`💼 La cagnotte actuelle est de ${cagnotte}€.`);
+    message.channel.send(`La cagnotte actuelle est de ${cagnotte}€. 💼`);
   }
 
   // Commande pour consulter les contributions individuelles
