@@ -10,6 +10,13 @@ let cagnotte = 0; // Cagnotte globale
 let contributions = {}; // Contributions par utilisateur
 const motsCibles = ['désolé', 'désolée', 'déso', 'dsl', 'sorry', 'sry', 'mea culpa', 'mea maxima culpa', 'm\'excuse', 'm\'excuser', 'excuse', 'pardon', 'pardonnez']; // Liste des mots cibles
 
+const reponses = [
+  'Et hop ! 1€ de plus dans la cagnotte 💸', 
+  'Ben alors **${message.author.username}**, on s\'excuse encore ? 😏',
+  'Dis-donc ! On n\'avait pas dit qu\'on ne s\'excusait plus ici ? 💰',
+  'ALERTE CONTRIBUTION ! **${message.author.username}** vient d\'ajouter 1 nouvel € dans la boite ! 🪙' 
+]
+
 // Fonction pour normaliser un texte (insensible à la casse et aux accents)
 function normalizeText(text) {
   return text
@@ -27,23 +34,20 @@ client.on('messageCreate', (message) => {
   if (message.author.bot) return; // Ne pas répondre aux messages du bot lui-même
   const messageNormalisé = normalizeText(message.content); // Normaliser le message
 
-  // Vérifier chaque mot cible
-  motsCibles.forEach((mot) => {
-    // Créer une expression régulière pour vérifier si le mot cible est présent (avec des frontières de mots)
-    const regex = new RegExp(`\\b${normalizeText(mot)}\\b`, 'i');
+  motsCibles.forEach((mot) => { // Vérifier chaque mot cible
+    const regex = new RegExp(`\\b${normalizeText(mot)}\\b`, 'i'); // Créer une expression régulière pour vérifier si le mot cible est présent (avec des frontières de mots)
 
     if (regex.test(messageNormalisé)) {
       cagnotte += 1; // Mettre à jour la cagnotte
 
-      // Mettre à jour la contribution de l'utilisateur
       if (!contributions[message.author.id]) {
         contributions[message.author.id] = 0;
       }
-      contributions[message.author.id] += 1;
+      contributions[message.author.id] += 1; // Mettre à jour la contribution de l'utilisateur
 
-      console.log(`ALERTE ! Le mot "${mot}" a été employé !`);
-      message.channel.send(`ALERTE ! Le mot "${mot}" a été employé ! La cagnotte est maintenant de ${cagnotte}€.`);
-
+      console.log(`🪙 ALERTE ! Le mot "${mot}" a été employé !`);
+      const reponseAleatoire = reponses[Math.floor(Math.andom() * reponses.length)]; // Choix d'une réponse aléatoire dans le tableau
+      message.channel.send(`${reponseAleatoire} La cagnotte est maintenant de ${cagnotte}€.`);
       const emoji = message.guild.emojis.cache.get('1260632973796053065'); // Réaction par un emoji au "mot interdit"
       if (emoji) {
         message.react(emoji).catch(console.error);
@@ -53,7 +57,7 @@ client.on('messageCreate', (message) => {
 
   // Commande de consultation de la cagnotte générale
   if (message.content.toLowerCase() === '!cagnotte') {
-    message.channel.send(`La cagnotte actuelle est de ${cagnotte}€.`);
+    message.channel.send(`💼 La cagnotte actuelle est de ${cagnotte}€.`);
   }
 
   // Commande pour consulter les contributions individuelles
