@@ -46,7 +46,7 @@ client.on('messageCreate', (message) => {
       contributions[message.author.id] += 1; // Mettre à jour la contribution de l'utilisateur
 
       console.log(`🪙 ALERTE ! Le mot "${mot}" a été employé !`);
-      const reponseAleatoire = reponses[Math.floor(Math.andom() * reponses.length)]; // Choix d'une réponse aléatoire dans le tableau
+      const reponseAleatoire = reponses[Math.floor(Math.random() * reponses.length)]; // Choix d'une réponse aléatoire dans le tableau
       message.channel.send(`${reponseAleatoire} La cagnotte est maintenant de ${cagnotte}€.`);
       const emoji = message.guild.emojis.cache.get('1260632973796053065'); // Réaction par un emoji au "mot interdit"
       if (emoji) {
