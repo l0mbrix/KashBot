@@ -8,7 +8,7 @@ const client = new Client({
 // Stockage des contributions
 let cagnotte = 0; // Cagnotte globale
 let contributions = {}; // Contributions par utilisateur
-const motsCibles = ['désolé', 'désolée', 'déso', 'dsl', 'sorry', 'sry', 'mea culpa', 'mea maxima culpa', 'm\'excuse', 'm\'excuser', 'excuse']; // Liste des mots cibles
+const motsCibles = ['désolé', 'désolée', 'déso', 'dsl', 'sorry', 'sry', 'mea culpa', 'mea maxima culpa', 'm\'excuse', 'm\'excuser', 'excuse', 'pardon', 'pardonnez']; // Liste des mots cibles
 
 // Fonction pour normaliser un texte (insensible à la casse et aux accents)
 function normalizeText(text) {
