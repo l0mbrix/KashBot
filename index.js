@@ -12,13 +12,6 @@ const motsCibles = ['désolé', 'désolée', 'déso', 'dsl', 'sorry', 'sry', 'me
 
 // const test = `😏 Ben alors ${message.author.username}, on s\'excuse encore ?`
 
-const reponses = [
-  `💸 Et hop ! 1€ de plus dans la cagnotte`, 
-  `😏 Ben alors ${message.author.id}, on s\'excuse encore ?`,
-  `💰 Dis-donc ! On n\'avait pas dit qu\'on ne s\'excusait plus ici ?`,
-  `🪙 ALERTE CONTRIBUTION ! ${message.author.id} vient d\'ajouter 1 nouvel € dans la boite !`
-]
-
 function normalizeText(text) { // Fonction pour normaliser un texte (insensible à la casse et aux accents)
   return text
     .toLowerCase()                          // Convertir en minuscules
@@ -32,6 +25,14 @@ client.once('ready', () => {
 
 // Recherche de mots et réponse du bot
 client.on('messageCreate', (message) => {
+
+  const reponses = [
+    `💸 Et hop ! 1€ de plus dans la cagnotte`, 
+    `😏 Ben alors ${message.author.id}, on s\'excuse encore ?`,
+    `💰 Dis-donc ! On n\'avait pas dit qu\'on ne s\'excusait plus ici ?`,
+    `🪙 ALERTE CONTRIBUTION ! ${message.author.id} vient d\'ajouter 1 nouvel € dans la boite !`
+  ]
+
   if (message.author.bot) return; // Ne pas répondre aux messages du bot lui-même
   const messageNormalisé = normalizeText(message.content); // Normaliser le message
 
