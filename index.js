@@ -10,7 +10,7 @@ let cagnotte = 0; // Cagnotte globale
 let contributions = {}; // Contributions par utilisateur
 const motsCibles = ['désolé', 'désolée', 'déso', 'dsl', 'sorry', 'sry', 'mea culpa', 'mea maxima culpa', 'm\'excuse', 'm\'excuser', 'excuse', 'pardon', 'pardonnez']; // Liste des mots cibles
 
-const test = `😏 Ben alors ${message.author.username}, on s\'excuse encore ?`,
+const test = `😏 Ben alors ${message.author.username}, on s\'excuse encore ?`
 
 const reponses = [
   `💸 Et hop ! 1€ de plus dans la cagnotte`, 
@@ -49,7 +49,8 @@ client.on('messageCreate', (message) => {
       console.log(`🪙 ALERTE ! Le mot "${mot}" a été employé !`);
       const reponseAleatoire = reponses[Math.floor(Math.random() * reponses.length)]; // Choix d'une réponse aléatoire dans le tableau
       
-      message.channel.send(`${reponseAleatoire} La cagnotte est maintenant de ${cagnotte}€. 💼`);
+      message.channel.send(`Bouuuh **${message.author.username}**. La cagnotte est maintenant de ${cagnotte}€.`);
+      // message.channel.send(`${reponseAleatoire} La cagnotte est maintenant de ${cagnotte}€. 💼`);
       const emoji = message.guild.emojis.cache.get('1260632973796053065'); // Réaction par un emoji au "mot interdit"
       if (emoji) {
         message.react(emoji).catch(console.error);
