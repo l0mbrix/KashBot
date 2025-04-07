@@ -51,7 +51,7 @@ client.on('messageCreate', (message) => {
       //const reponseAleatoire = reponses[Math.floor(Math.random() * reponses.length)]; // Choix d'une réponse aléatoire dans le tableau
       // message.channel.send(`Bouuuh **${message.author.username}**. La cagnotte est maintenant de ${cagnotte}€.`);
       
-      message.reply(`${reponseAleatoire} La cagnotte est maintenant de ${cagnotte}€.`);
+      message.reply(`${reponseAleatoire(message)} La cagnotte est maintenant de ${cagnotte}€.`);
       const emoji = message.guild.emojis.cache.get('1260632973796053065'); // Réaction par emoji REPORT du serveur
       if (emoji) {
         message.react(emoji).catch(console.error);
