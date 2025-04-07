@@ -8,8 +8,18 @@ const client = new Client({
 // Test d'importation sorryWordsList
 import {sorryWordsList} from "enum/matchWordsList.js"
 
+// Vérification de sorryWordsList
+if (!sorryWordsList || !Array.isArray(sorryWordsList)) {
+  console.error("sorryWordsList n'est pas défini ou n'est pas une liste.");
+}
+
 // Test d'importation randomSorryReply
 import {randomSorryReply} from "enum/randomReply.js"
+
+// Vérification de randomSorryReply
+if (!randomSorryReply || !Array.isArray(randomSorryReply)) {
+  console.error("randomSorryReply n'est pas défini ou n'est pas une liste.")
+}
 
 // Stockage des contributions
 let cagnotte = 0; // Cagnotte globale
