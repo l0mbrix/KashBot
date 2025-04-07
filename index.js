@@ -5,21 +5,9 @@ const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
 });
 
-// Test d'importation sorryWordsList
-import {sorryWordsList} from "enum/matchWordsList.js"
-
-// Vérification de sorryWordsList
-if (!sorryWordsList || !Array.isArray(sorryWordsList)) {
-  console.error("sorryWordsList n'est pas défini ou n'est pas une liste.");
-}
-
-// Test d'importation randomSorryReply
-import {randomSorryReply} from "enum/randomReply.js"
-
-// Vérification de randomSorryReply
-if (!randomSorryReply || !Array.isArray(randomSorryReply)) {
-  console.error("randomSorryReply n'est pas défini ou n'est pas une liste.")
-}
+// Test d'importation sorryWordsList et randomSorryReply
+const { sorryWordsList } = require('./enum/matchWordsList.js');
+const { randomSorryReply } = require('./enum/randomReply.js');
 
 // Stockage des contributions
 let cagnotte = 0; // Cagnotte globale
@@ -66,7 +54,7 @@ client.on('messageCreate', (message) => {
       const reponseAleatoire = reponses[Math.floor(Math.random() * reponses.length)]; // Choix d'une réponse aléatoire dans le tableau
       
       // message.channel.send(`Bouuuh **${message.author.username}**. La cagnotte est maintenant de ${cagnotte}€.`);
-      randomSorryReply.reply(`${reponseAleatoire} La cagnotte est maintenant de ${cagnotte}€.`);
+      message.reply(`${reponseAleatoire} La cagnotte est maintenant de ${cagnotte}€.`);
       const emoji = message.guild.emojis.cache.get('1260632973796053065'); // Réaction par emoji REPORT du serveur
       if (emoji) {
         message.react(emoji).catch(console.error);
