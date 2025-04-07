@@ -28,14 +28,7 @@ client.once('ready', () => {
 
 // Recherche de mots et réponse du bot
 client.on('messageCreate', (message) => {
-
-  const reponses = [ // ATTENTION : l'appel de "message" ne peut se faire qu'à partir d'ici !!!!!
-    `💸 Et hop ! 1€ de plus dans la cagnotte`, 
-    `😏 Ben alors **${message.author.username}**, on s\'excuse encore ?`,
-    `💰 Dis-donc ! On n\'avait pas dit qu\'on ne s\'excusait plus ici ?`,
-    `🪙 ALERTE CONTRIBUTION ! **${message.author.username}** vient d\'ajouter 1 nouvel € dans la boite !`
-  ]
-
+  
   if (message.author.bot) return; // Ne pas répondre aux messages du bot lui-même
   const messageNormalisé = normalizeText(message.content); // Normaliser le message
 
@@ -51,9 +44,13 @@ client.on('messageCreate', (message) => {
       contributions[message.author.id] += 1; // Mettre à jour la contribution de l'utilisateur
 
       console.log(`ALERTE ! Le mot "${mot}" a été employé !`);
-      const reponseAleatoire = reponses[Math.floor(Math.random() * reponses.length)]; // Choix d'une réponse aléatoire dans le tableau
-      
+
+      const reponseAleatoire = randomSorryReply[Math.floor(Math.random() * randomSorryReply.length)];
+      const messageFinal = reponseAleatoire(message); // Exécution de la fonction avec "message"
+
+      //const reponseAleatoire = reponses[Math.floor(Math.random() * reponses.length)]; // Choix d'une réponse aléatoire dans le tableau
       // message.channel.send(`Bouuuh **${message.author.username}**. La cagnotte est maintenant de ${cagnotte}€.`);
+      
       message.reply(`${reponseAleatoire} La cagnotte est maintenant de ${cagnotte}€.`);
       const emoji = message.guild.emojis.cache.get('1260632973796053065'); // Réaction par emoji REPORT du serveur
       if (emoji) {
