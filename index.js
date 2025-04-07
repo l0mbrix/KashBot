@@ -10,7 +10,8 @@ let cagnotte = 0; // Cagnotte globale
 let contributions = {}; // Contributions par utilisateur
 const motsCibles = ['désolé', 'désolée', 'déso', 'dsl', 'sorry', 'sry', 'mea culpa', 'mea maxima culpa', 'm\'excuse', 'm\'excuser', 'excuse', 'pardon', 'pardonnez']; // Liste des mots cibles
 
-function normalizeText(text) { // Fonction pour normaliser un texte (insensible à la casse et aux accents)
+// Normalisation du texte (insensibilité casse/accents)
+function normalizeText(text) {
   return text
     .toLowerCase()                          // Convertir en minuscules
     .normalize('NFD')                       // Normalisation Unicode
@@ -45,12 +46,12 @@ client.on('messageCreate', (message) => {
       }
       contributions[message.author.id] += 1; // Mettre à jour la contribution de l'utilisateur
 
-      console.log(`🪙 ALERTE ! Le mot "${mot}" a été employé !`);
+      console.log(`ALERTE ! Le mot "${mot}" a été employé !`);
       const reponseAleatoire = reponses[Math.floor(Math.random() * reponses.length)]; // Choix d'une réponse aléatoire dans le tableau
       
       // message.channel.send(`Bouuuh **${message.author.username}**. La cagnotte est maintenant de ${cagnotte}€.`);
-      message.channel.send(`${reponseAleatoire} La cagnotte est maintenant de ${cagnotte}€. 💼`);
-      const emoji = message.guild.emojis.cache.get('1260632973796053065'); // Réaction par un emoji au "mot interdit"
+      message.reply(`${reponseAleatoire} La cagnotte est maintenant de ${cagnotte}€.`);
+      const emoji = message.guild.emojis.cache.get('1260632973796053065'); // Réaction par emoji REPORT du serveur
       if (emoji) {
         message.react(emoji).catch(console.error);
       }
@@ -59,7 +60,7 @@ client.on('messageCreate', (message) => {
 
   // Commande de consultation de la cagnotte générale
   if (message.content.toLowerCase() === '!cagnotte') {
-    message.channel.send(`La cagnotte actuelle est de ${cagnotte}€. 💼`);
+    message.reply(`La cagnotte actuelle est de ${cagnotte}€. 💼`);
   }
 
   // Commande pour consulter les contributions individuelles
@@ -68,7 +69,7 @@ client.on('messageCreate', (message) => {
     for (let userId in contributions) {
       historique += `<@${userId}> : ${contributions[userId]}€\n`;
     }
-    message.channel.send(historique);
+    message.reply(historique);
   }
 });
 
