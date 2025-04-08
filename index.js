@@ -2,7 +2,7 @@ require('dotenv').config();
 
 // All I need for my Bot to run properly
 const { Client, GatewayIntentBits } = require('discord.js');
-const db = require('./db'); 
+const db = require('./db/db.js'); 
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
 });

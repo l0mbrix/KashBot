@@ -56,7 +56,7 @@ function addOrUpdateContribution(db, userId, montant) {
     if (existingUser) {
         db.prepare('UPDATE contributions SET montant = montant + ? WHERE user_id = ?').run(montant, userId);
     } else {
-        db.prepare('INSERT INTO contributions (user_id, montant) VALUES (?, ?)').run(userId, montant);
+        db.prepare('INSERT INTO contributions (user_id, montant) VALUES (?, ?').run(userId, montant);
     }
 }
 
