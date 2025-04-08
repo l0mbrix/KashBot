@@ -44,7 +44,7 @@ function getCagnotteTotal(db) {
 function createContributionsTable(db) {
     db.prepare(`
         CREATE TABLE IF NOT EXISTS contributions (
-        user_id TEST PRIMARY KEY,
+        user_id TEXT PRIMARY KEY,
         montant INTEGER
         )
     `).run();
@@ -52,6 +52,21 @@ function createContributionsTable(db) {
 
 // Funct to add-update contributions by user
 function addOrUpdateContribution(db, userId, montant) {
+    console.log(`userId: ${userId}, montant: ${montant}`);
+
+    // Vérifie que le montant est bien un nombre valide
+    montant = Number(montant);
+    if (isNaN(montant)) {
+        console.error('Erreur : Montant invalide', montant);
+        return;  // Ne pas continuer si le montant est invalide
+    }
+
+    // Vérifie si les données sont valides
+    if (!userId || !montant || isNaN(montant)) {
+        console.error('Données invalides :', { userId, montant });
+        return;  // Si l'une des données est incorrecte, on arrête l'exécution ici
+    }
+
     const existingUser = db.prepare('SELECT * FROM contributions WHERE user_id = ?').get(userId);
     if (existingUser) {
         db.prepare('UPDATE contributions SET montant = montant + ? WHERE user_id = ?').run(montant, userId);
