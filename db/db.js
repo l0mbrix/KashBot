@@ -19,35 +19,37 @@ function getServerDb(guildId) {
 }
 
 // Funct to create a table in guild db if none
-function createCagnotteTable(db) {
-    db.prepare(`
+/* function createCagnotteTable(db) {
+    db.exec(`
         CREATE TABLE IF NOT EXISTS cagnotte (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         montant INTEGER
         )
-    `).run();
-}
+    `);
+    db.close();
+}*/
 
 // Funct to add numbers
 function addMontantToCagnotte(db, montant) {
     const insert = db.prepare('INSERT INTO cagnotte (montant) VALUES (?)');
     insert.run(montant);
+    db.close(); // Close the connection
 }
 
 // Funct to get total numbers
-function getCagnotteTotal(db) {
+/* function getCagnotteTotal(db) {
     const row = db.prepare('SELECT SUM(montant) AS total FROM cagnotte').get();
     return row.total || 0;
-}
+}*/
 
 // Funct to create a table for users
 function createContributionsTable(db) {
-    db.prepare(`
+    db.exec(`
         CREATE TABLE IF NOT EXISTS contributions (
-        user_id TEST PRIMARY KEY,
+        user_id TEXT PRIMARY KEY,
         montant INTEGER
         )
-    `).run();
+    `);
 }
 
 // Funct to add-update contributions by user
@@ -56,9 +58,13 @@ function addOrUpdateContribution(db, userId, montant) {
     if (existingUser) {
         db.prepare('UPDATE contributions SET montant = montant + ? WHERE user_id = ?').run(montant, userId);
     } else {
-        db.prepare('INSERT INTO contributions (user_id, montant) VALUES (?, ?').run(userId, montant);
+        db.prepare('INSERT INTO contributions (user_id, montant) VALUES (?, ?)').run(userId, montant);
     }
+    // Check if the user already exists in the table
+    return existingUser ? 'updated' : 'added'; // Return the action performed
 }
+
+// Nouvelle fonction : addition des contributions (get sum contribution)
 
 // Funct to get gild's contribution
 function getContributions(db) {
@@ -67,9 +73,9 @@ function getContributions(db) {
 
 module.exports = {
     getServerDb,
-    createCagnotteTable,
+    //createCagnotteTable,
     addMontantToCagnotte,
-    getCagnotteTotal,
+    //getCagnotteTotal,
     createContributionsTable,
     addOrUpdateContribution,
     getContributions,
