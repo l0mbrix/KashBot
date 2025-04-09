@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+
 // All I need for my Bot to run properly
 const { Client, GatewayIntentBits } = require('discord.js');
 const db = require('./db/db.js'); 
@@ -8,6 +9,8 @@ const client = new Client({
 });
 const { sorryWordsList } = require('./enum/matchWordsList.js');
 const { randomSorryReply } = require('./enum/randomReply.js');
+const { PermissionsBitField } = require('discord.js');
+
 
 // Normalisation du texte (insensibilité casse/accents)
 function normalizeText(text) {
@@ -94,10 +97,9 @@ client.on('messageCreate', async (message) => {
   }
 
   if (message.content.toLowerCase() === '!boom') {
-    if (!message.member.permissions.has('ADMINISTRATOR')) {
+    if (!message.member || !message.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
       return message.reply('🚫 DIS DONC ! Il n\'y a que l\`administrateur qui a le droit de faire ça !');
     }
-
     const serverDb = db.getServerDb(message.guild.id);
     try {
       db.resetContributions(serverDb); // Reset contributions
