@@ -93,6 +93,22 @@ client.on('messageCreate', async (message) => {
     }
   }
 
+  if (message.content.toLowerCase() === '!boom') {
+    if (!message.member.permissions.has('ADMINISTRATOR')) {
+      return message.reply('🚫 DIS DONC ! Il n\'y a que l\`administrateur qui a le droit de faire ça !');
+    }
+
+    const serverDb = db.getServerDb(message.guild.id);
+    try {
+      db.resetContributions(serverDb); // Reset contributions
+      message.reply('💥 BOOM ! La tirelire a été vidée !').catch(console.error);
+    } catch (error) {
+      console.error(`❌ Une erreur est survenue lors de la réinitialisation de la tirelire:`, error);
+    } finally {
+      serverDb.close(); // Ensure the database connection is closed
+    }
+  }
+
   (db.getServerDb(message.guild.id)).close(); // Close connection
 });
 

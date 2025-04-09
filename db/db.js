@@ -57,10 +57,17 @@ function getContributions(db) {
     return db.prepare('SELECT user_id, montant FROM contributions').all();
 }
 
+// Funct to reset the piggy bank
+function resetContributions(db){
+    db.prepare('DELETE FROM contributions').run();
+}
+
+
 module.exports = {
     getServerDb,
     createContributionsTable,
     addOrUpdateContribution,
     getContributions,
     getTotalContributions,
+    resetContributions,
 };
