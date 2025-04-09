@@ -75,12 +75,24 @@ client.on('messageCreate', async (message) => {
           historique += `Utilisateur inconnu (${contribution.user_id}) : ${contribution.montant}€\n`; // Fallback for unknown users
         }
       }
-
       message.reply(historique).catch(console.error);
     } catch (error) {
       console.error(`Erreur lors de la récupération des contributions pour le serveur ${message.guild.id}:`, error);
     }
   }
+
+  if (message.content.toLowerCase() === '!tirelire') {
+    const serverDb = db.getServerDb(message.guild.id); // Define serverDb
+    try {
+      const total = db.getTotalContributions(serverDb); // Call the function with the database connection
+      message.reply(`La tirelire est lourde ! Il y a actuellement ${total}€ à l'intérieur ! 💰`).catch(console.error);
+    } catch (error) {
+      console.error(`Erreur lors de la récupération de la tirelire pour le serveur ${message.guild.id}:`, error);
+    } finally {
+      serverDb.close(); // Ensure the database connection is closed
+    }
+  }
+
   (db.getServerDb(message.guild.id)).close(); // Close connection
 });
 

@@ -10,36 +10,18 @@ if (!fs.existsSync(databaseDirectory)) {
     fs.mkdirSync(databaseDirectory);
 }
 
-// Funct to obtain a specific db for a guild
+// Function to obtain a specific db for a guild
 function getServerDb(guildId) {
     const dbPath = path.join(databaseDirectory, `serveur_${guildId}.db`);
-
     // Creating-opening a guild db
     return betterSqlite3(dbPath);
 }
 
-// Funct to create a table in guild db if none
-/* function createCagnotteTable(db) {
-    db.exec(`
-        CREATE TABLE IF NOT EXISTS cagnotte (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        montant INTEGER
-        )
-    `);
-    db.close();
-}*/
-
-// Funct to add numbers
+/* Funct to add numbers
 function addMontantToCagnotte(db, montant) {
     const insert = db.prepare('INSERT INTO cagnotte (montant) VALUES (?)');
     insert.run(montant);
     db.close(); // Close the connection
-}
-
-// Funct to get total numbers
-/* function getCagnotteTotal(db) {
-    const row = db.prepare('SELECT SUM(montant) AS total FROM cagnotte').get();
-    return row.total || 0;
 }*/
 
 // Funct to create a table for users
@@ -64,7 +46,11 @@ function addOrUpdateContribution(db, userId, montant) {
     return existingUser ? 'updated' : 'added'; // Return the action performed
 }
 
-// Nouvelle fonction : addition des contributions (get sum contribution)
+// Function to SUM all the contributions
+function getTotalContributions(db) {
+    const row = db.prepare('SELECT SUM(montant) AS total FROM contributions').get();
+    return row.total || 0; // Return the total or 0 if no contributions
+}
 
 // Funct to get gild's contribution
 function getContributions(db) {
@@ -73,10 +59,8 @@ function getContributions(db) {
 
 module.exports = {
     getServerDb,
-    //createCagnotteTable,
-    addMontantToCagnotte,
-    //getCagnotteTotal,
     createContributionsTable,
     addOrUpdateContribution,
     getContributions,
+    getTotalContributions,
 };
