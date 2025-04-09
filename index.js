@@ -32,7 +32,6 @@ client.on('messageCreate', async (message) => {
 
   const messageNormalisé = normalizeText(message.content); // Normaliser le message
   try {
-    //db.createCagnotteTable(serverDb);
     db.createContributionsTable(db.getServerDb(message.guild.id));
   } catch (error) {
     console.error(`Erreur lors de la création des tables pour le serveur ${message.guild.id}:`, error);
@@ -43,11 +42,6 @@ client.on('messageCreate', async (message) => {
 
     if (regex.test(messageNormalisé)) {
       console.log(`ALERTE ! Le mot "${mot}" a été employé !`);
-      /*try {
-        db.addMontantToCagnotte(serverDb, 1);
-      } catch (error) {
-        console.error(`Erreur lors de la MAJ de la table cagnotte du serveur ${message.guild.id}:`, error);
-      }*/
       try {
         db.addOrUpdateContribution(db.getServerDb(message.guild.id), message.author.id, 1);
       } catch (error) {
@@ -65,15 +59,6 @@ client.on('messageCreate', async (message) => {
       }
     }
   });
-
-  // Commande de consultation de la cagnotte générale
-  /*if (message.content.toLowerCase() === '!cagnotte') {
-    try {
-      message.reply(`La cagnotte actuelle est de ${db.getCagnotteTotal(serverDb)}€. 💼`);
-    } catch (error) {
-      console.error(`Erreur lors de la récupération de la cagnotte pour le serveur ${message.guild.id}:`, error);
-    }
-  }*/
 
   // Commande pour consulter les contributions individuelles
   if (message.content.toLowerCase() === '!historique') {
