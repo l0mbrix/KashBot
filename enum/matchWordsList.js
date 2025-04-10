@@ -12,9 +12,9 @@ const sorryWordsList = [
     'm\'excuser', 
     'excuse', 
     'pardon', 
-    'pardonnez', 
-    'mb', 
-    'my bad'
+    'pardonnez',
+    'mb',
+    'my bad',
 ];
 
 module.exports = { sorryWordsList };

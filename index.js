@@ -14,17 +14,24 @@ const { PermissionsBitField } = require('discord.js');
 // Builds a regex pattern to match a word with optional non-alphanumeric characters between letters
 const regexCache = new Map();
 
-function buildFuzzyRegex(word) {
+// Function to check for fuzzy matches
+function buildFuzzyRegex(word) { 
   if (regexCache.has(word)) {
-    return regexCache.get(word); // Return cached regex if it exists
+    return regexCache.get(word);
   }
-  const pattern = word
+  const pattern = `\\b`+ word
     .split('')
-    .map(letter => `${letter}[\\W_]*`) // chaque lettre peut être suivie de caractères non alphabétiques
-    .join('');
-  const regex = new RegExp(pattern, 'i'); // i = insensible à la casse
-  regexCache.set(word, regex); // Cache the generated regex
+    .map(letter => `${letter}[\\W_]*`) // Allow non-alphanumeric characters between letters
+    .join('') + `\\b`; // Strict word boundares
+  const regex = new RegExp(pattern, 'i'); // i = case-insensitive
+  regexCache.set(word, regex); // Store the cache
   return regex;
+}
+
+// Function to only match "mb" when it's a standalone word
+function detectMbExcuse(text) { 
+  const mbPattern = /\b[mM][bB]\b/;
+  return mbPattern.test(text);
 }
 
 // Normalisation du texte (insensibilité casse/accents)
@@ -60,7 +67,7 @@ client.on('messageCreate', async (message) => {
   for (const mot of sorryWordsList) { // Vérifier chaque mot cible
     const regex = buildFuzzyRegex(normalizeText(mot)); // Créer une expression régulière pour vérifier si le mot cible est présent (avec des frontières de mots)
     if (regex.test(normalizeText(message.content))) {
-      console.log(`Mot détecté en leetspeak : ${mot}`);
+      console.log(`Tentative de contournement trouvée : ${mot}`);
 
       // Saving + answering
       try {
