@@ -28,6 +28,22 @@ function buildFuzzyRegex(word) {
   return regex;
 }
 
+// Function to check for l33t
+function leetToNormal(text) {
+  return text.replace(/\b[\w@\$!\.]+?\b/g, word => {
+    return word
+      .replace(/4|@/g, 'a')
+      .replace(/3|€/g, 'e')
+      .replace(/1|!|\|/g, 'i')
+      .replace(/0/g, 'o')
+      .replace(/5|\$|z|Z/g, 's')
+      .replace(/7/g, 't')
+      .replace(/8/g, 'b')
+      .replace(/2/g, 'z')
+      .replace(/9/g, 'g');
+  });
+}
+
 // Function to only match "mb" when it's a standalone word
 function detectMbExcuse(text) { 
   const mbPattern = /\b[mM][bB]\b/;
@@ -35,11 +51,12 @@ function detectMbExcuse(text) {
 }
 
 // Normalisation du texte (insensibilité casse/accents)
-function normalizeText(text) {                       // Apply leet speak transformation
-  return text
-    .toLowerCase()                          // Convertir en minuscules
-    .normalize('NFD')                       // Normalisation Unicode
-    .replace(/[\u0300-\u036f]/g, '');       // Retirer les accents
+function normalizeText(text) {         // Apply leet speak transformation
+  return leetToNormal(text)            // Leet speak into words
+    .toLowerCase()                     // Lowercase
+    .normalize('NFD')                  // Normalize unicode
+    .replace(/[\u0300-\u036f]/g, '')   // Remove accents
+    .replace(/[^a-z0-9]/g, '');        // Remove non-alphanumeric characters
 }
 
 client.once('ready', () => {
@@ -57,7 +74,6 @@ client.on('messageCreate', async (message) => {
 
   const messageNormalisé = normalizeText(message.content); // Normaliser le message
   
-
   try {
     db.createContributionsTable(db.getServerDb(message.guild.id));
   } catch (error) {
