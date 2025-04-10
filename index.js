@@ -11,13 +11,49 @@ const { sorryWordsList } = require('./enum/matchWordsList.js');
 const { randomSorryReply } = require('./enum/randomReply.js');
 const { PermissionsBitField } = require('discord.js');
 
+// Builds a regex pattern to match a word with optional non-alphanumeric characters between letters
+const regexCache = new Map();
+
+function buildFuzzyRegex(word) {
+  if (regexCache.has(word)) {
+    return regexCache.get(word); // Return cached regex if it exists
+  }
+  const pattern = word
+    .split('')
+    .map(letter => `${letter}[\\W_]*`) // chaque lettre peut être suivie de caractères non alphabétiques
+    .join('');
+  const regex = new RegExp(pattern, 'i'); // i = insensible à la casse
+  regexCache.set(word, regex); // Cache the generated regex
+  return regex;
+}
+
+// Leet speak detection
+function leetSpk(text) {
+  return text
+    .replace(/4/g, 'a')
+    .replace(/@/g, 'a')
+    .replace(/3/g, 'e')
+    .replace(/\€/g, 'e')
+    .replace(/1/g, 'i')
+    .replace(/!/g, 'i')
+    .replace(/\|/g, 'l')
+    .replace(/0/g, 'o')
+    .replace(/5/g, 's')
+    .replace(/\$/g, 's')
+    .replace(/z/g, 's')
+    .replace(/Z/g, 's')
+    .replace(/7/g, 't')
+    .replace(/8/g, 'b')
+    .replace(/2/g, 'z')
+    .replace(/9/g, 'g');
+}
 
 // Normalisation du texte (insensibilité casse/accents)
 function normalizeText(text) {
-  return text
-    .toLowerCase()                          // Convertir en minuscules
-    .normalize('NFD')                       // Normalisation Unicode
-    .replace(/[\u0300-\u036f]/g, '');       // Retirer les accents
+  return leetSpk(text)                        // Apply leet speak transformation
+      .toLowerCase()                          // Convertir en minuscules
+      .normalize('NFD')                       // Normalisation Unicode
+      .replace(/[\u0300-\u036f]/g, '');       // Retirer les accents
 }
 
 client.once('ready', () => {
@@ -40,11 +76,12 @@ client.on('messageCreate', async (message) => {
     console.error(`Erreur lors de la création des tables pour le serveur ${message.guild.id}:`, error);
   }
 
-  sorryWordsList.forEach((mot) => { // Vérifier chaque mot cible
-    const regex = new RegExp(`\\b${normalizeText(mot)}\\b`, 'i'); // Créer une expression régulière pour vérifier si le mot cible est présent (avec des frontières de mots)
+  for (const mot of sorryWordsList) { // Vérifier chaque mot cible
+    const regex = buildFuzzyRegex(normalizeText(mot)); // Créer une expression régulière pour vérifier si le mot cible est présent (avec des frontières de mots)
+    if (regex.test(normalizeText(message.content))) {
+      console.log(`Mot détecté en leetspeak : ${mot}`);
 
-    if (regex.test(messageNormalisé)) {
-      console.log(`ALERTE ! Le mot "${mot}" a été employé !`);
+      // Saving + answering
       try {
         db.addOrUpdateContribution(db.getServerDb(message.guild.id), message.author.id, 1);
       } catch (error) {
@@ -53,6 +90,7 @@ client.on('messageCreate', async (message) => {
 
       const reponseAleatoire = randomSorryReply[Math.floor(Math.random() * randomSorryReply.length)];
       const responseText = typeof reponseAleatoire === 'function' ? reponseAleatoire(message) : reponseAleatoire; // Vérifier si la réponse est une fonction
+
       const emoji = message.guild.emojis.cache.get('1260632973796053065'); // Réaction par emoji REPORT du serveur
       if (emoji) {
         message.react(emoji).catch(console.error);
@@ -60,8 +98,10 @@ client.on('messageCreate', async (message) => {
         console.error('Emoji non trouvé dans le serveur.');
         message.reply(responseText).catch(console.error); // Reply with the random response if emoji is not found
       }
+
+      break; // Sortir de la boucle après avoir trouvé un mot
     }
-  });
+  }
 
   // Commande pour consulter les contributions individuelles
   if (message.content.toLowerCase() === '!historique') {
@@ -112,6 +152,6 @@ client.on('messageCreate', async (message) => {
   }
 
   (db.getServerDb(message.guild.id)).close(); // Close connection
-});
+}); // Close the messageCreate event listener
 
 client.login(process.env.DISCORD_TOKEN);
