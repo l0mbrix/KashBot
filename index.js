@@ -29,12 +29,13 @@ function buildFuzzyRegex(word) {
     .map(letter => `${letter}[\\W_]*`) // Allow non-alphanumeric characters between letters
     .join('') + `\\b`; // Match until a word boundary or whitespace
   const regex = new RegExp(pattern, 'i'); // i = case-insensitive
-  if (regexCache.size >= MAX_CACHE_SIZE) {
-    const oldestKey = regexCache.keys().next().value; // Get the oldest key
-    regexCache.delete(oldestKey); // Remove the oldest entry
-  }
-  regexCache.set(word, regex); // Store the cache
-  return regex;
+  
+  //if (regexCache.size >= MAX_CACHE_SIZE) {
+    //const oldestKey = regexCache.keys().next().value; // Get the oldest key
+    //regexCache.delete(oldestKey); // Remove the oldest entry
+  //}
+  //regexCache.set(word, regex); // Store the cache
+  //return regex;
 }
 
 // Function to check for l33t speak
