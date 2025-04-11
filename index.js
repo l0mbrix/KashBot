@@ -13,6 +13,7 @@ const { PermissionsBitField } = require('discord.js');
 
 // Builds a regex pattern to match a word with optional non-alphanumeric characters between letters
 const regexCache = new Map();
+const MAX_CACHE_SIZE = 100; // Set a maximum size for the cache
 
 // Function to check for fuzzy matches
 function buildFuzzyRegex(word) { 
@@ -20,11 +21,18 @@ function buildFuzzyRegex(word) {
     return regexCache.get(word);
   }
   
+  // Construct a regex pattern:
+  // - `\\b` ensures the match starts and ends at a word boundary.
   const pattern = `\\b` + word
     .split('') // Split the word into letters
+    .map(letter => `${letter}[\\s-]*`) // Allow spaces and hyphens between letters
     .map(letter => `${letter}[\\W_]*`) // Allow non-alphanumeric characters between letters
     .join('') + `\\b`; // Match until a word boundary or whitespace
   const regex = new RegExp(pattern, 'i'); // i = case-insensitive
+  if (regexCache.size >= MAX_CACHE_SIZE) {
+    const oldestKey = regexCache.keys().next().value; // Get the oldest key
+    regexCache.delete(oldestKey); // Remove the oldest entry
+  }
   regexCache.set(word, regex); // Store the cache
   return regex;
 }
