@@ -19,10 +19,11 @@ function buildFuzzyRegex(word) {
   if (regexCache.has(word)) {
     return regexCache.get(word);
   }
+  
   const pattern = `\\b` + word
     .split('') // Split the word into letters
     .map(letter => `${letter}[\\W_]*`) // Allow non-alphanumeric characters between letters
-    .join('') + `(?=\\b|\\s)`; // Match until a word boundary or whitespace
+    .join('') + `\\b`; // Match until a word boundary or whitespace
   const regex = new RegExp(pattern, 'i'); // i = case-insensitive
   regexCache.set(word, regex); // Store the cache
   return regex;
