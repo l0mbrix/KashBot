@@ -101,8 +101,8 @@ client.on('messageCreate', async (message) => {
         message.react(emoji).catch(console.error);
       } else {
         console.error('Emoji non trouvé dans le serveur.');
-        message.reply(responseText).catch(console.error);
-      }
+      } 
+      message.reply(responseText).catch(console.error);
       break; // Break the loop if a match is found
     }
   }
