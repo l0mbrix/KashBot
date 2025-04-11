@@ -27,15 +27,15 @@ function buildFuzzyRegex(word) {
     .split('') // Split the word into letters
     .map(letter => `${letter}[\\s-]*`) // Allow spaces and hyphens between letters
     .map(letter => `${letter}[\\W_]*`) // Allow non-alphanumeric characters between letters
-    .join('') + `\\b`; // Match until a word boundary or whitespace
+    .join('[\\s.,!?-]*') + `\\b`; // Match until a word boundary or whitespace
   const regex = new RegExp(pattern, 'i'); // i = case-insensitive
   
   //if (regexCache.size >= MAX_CACHE_SIZE) {
     //const oldestKey = regexCache.keys().next().value; // Get the oldest key
     //regexCache.delete(oldestKey); // Remove the oldest entry
   //}
-  //regexCache.set(word, regex); // Store the cache
-  //return regex;
+  regexCache.set(word, regex); // Store the cache
+  return regex;
 }
 
 // Function to check for l33t speak
@@ -66,7 +66,7 @@ function normalizeText(text) {         // Apply l33t speak transformation
     .toLowerCase()                     // Lowercase
     .normalize('NFD')                  // Normalize unicode
     .replace(/[\u0300-\u036f]/g, '')   // Remove accents
-    .replace(/[^a-z0-9]/g, '');        // Remove non-alphanumeric characters
+    .replace(/[^a-z0-9\s.,!?]/g, '');  // Keep spaces and common punctuation
 }
 
 // Console log
