@@ -17,13 +17,6 @@ function getServerDb(guildId) {
     return betterSqlite3(dbPath);
 }
 
-/* Funct to add numbers
-function addMontantToCagnotte(db, montant) {
-    const insert = db.prepare('INSERT INTO cagnotte (montant) VALUES (?)');
-    insert.run(montant);
-    db.close(); // Close the connection
-}*/
-
 // Funct to create a table for users
 function createContributionsTable(db) {
     db.exec(`
