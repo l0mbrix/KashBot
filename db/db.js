@@ -62,6 +62,24 @@ function resetContributions(db){
     db.prepare('DELETE FROM contributions').run();
 }
 
+// Funct to reset a specific user's contributions
+function resetUserContribution(db, userId) {
+    db.prepare('DELETE FROM contributions WHERE user_id = ?').run(userId);
+}
+
+// Funct to get a specific user's contribution
+function getUserContribution(db, userId) {
+    return db.prepare('SELECT * FROM contributions WHERE user_id = ?').get(userId);
+}
+
+// Funct to substract a specific user's contribution
+function subtractUserContribution(db, userId, amount) {
+    const current = getUserContribution(db, userId);
+    if (!current) throw new Error("Utilisateur introuvable.");
+    if (current.montant < amount) throw new Error("Fonds insuffisants.");
+
+    db.prepare('UPDATE contributions SET montant = montant - ? WHERE user_id = ?').run(amount, userId);
+}
 
 module.exports = {
     getServerDb,
@@ -70,4 +88,7 @@ module.exports = {
     getContributions,
     getTotalContributions,
     resetContributions,
+    resetUserContribution,
+    getUserContribution,
+    subtractUserContribution,
 };
