@@ -12,8 +12,8 @@ const { PermissionsBitField } = require('discord.js');
 
 
 // Builds a regex pattern to match a word with optional non-alphanumeric characters between letters
-// const regexCache = new Map();
-// const MAX_CACHE_SIZE = 100; // Set a maximum size for the cache
+const regexCache = new Map();
+const MAX_CACHE_SIZE = 100; // Set a maximum size for the cache
 
 // Function to check for fuzzy matches
 function buildFuzzyRegex(word) { 
