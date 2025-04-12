@@ -20,20 +20,20 @@ function buildFuzzyRegex(word) {
   if (regexCache.has(word)) {
     return regexCache.get(word);
   }
-  
+
   // Construct a regex pattern:
   // - `\\b` ensures the match starts and ends at a word boundary.
   const pattern = `\\b` + word
     .split('') // Split the word into letters
-    .map(letter => `${letter}[\\s-]*`) // Allow spaces and hyphens between letters
-    .map(letter => `${letter}[\\W_]*`) // Allow non-alphanumeric characters between letters
+    // .map(letter => `${letter}[\\s-]*`) // Allow spaces and hyphens between letters
+    // .map(letter => `${letter}[\\W_]*`) // Allow non-alphanumeric characters between letters
     .join('[\\s.,!?-]*') + `\\b`; // Match until a word boundary or whitespace
-  const regex = new RegExp(pattern, 'i'); // i = case-insensitive
+    const regex = new RegExp(pattern, 'i'); // i = case-insensitive
   
-  //if (regexCache.size >= MAX_CACHE_SIZE) {
-    //const oldestKey = regexCache.keys().next().value; // Get the oldest key
-    //regexCache.delete(oldestKey); // Remove the oldest entry
-  //}
+  // if (regexCache.size >= MAX_CACHE_SIZE) {
+    // const oldestKey = regexCache.keys().next().value; // Get the oldest key
+    // regexCache.delete(oldestKey); // Remove the oldest entry
+  // }
   regexCache.set(word, regex); // Store the cache
   return regex;
 }
@@ -95,8 +95,10 @@ client.on('messageCreate', async (message) => {
 
   for (const mot of sorryWordsList) { // Check each word in the list
     const regex = buildFuzzyRegex(normalizeText(mot));
-    if (regex.test(normalizeText(message.content))) {
+    if (regex.test(message.content)) {
       console.log(`Tentative de contournement trouvée : ${mot}`);
+      break;
+      
 
       // Saving + answering
       try {
