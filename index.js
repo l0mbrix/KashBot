@@ -95,10 +95,8 @@ client.on('messageCreate', async (message) => {
 
   for (const mot of sorryWordsList) { // Check each word in the list
     const regex = buildFuzzyRegex(normalizeText(mot));
-    if (regex.test(message.content)) {
+    if (regex.test(messageNormalisé)) {
       console.log(`Tentative de contournement trouvée : ${mot}`);
-      break;
-      
 
       // Saving + answering
       try {
